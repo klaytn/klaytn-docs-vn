@@ -1,0 +1,136 @@
+---
+sidebar_position: 4
+---
+
+# Tính năng Markdown
+
+Docusaurus hỗ trợ tính năng **[Markdown](https://daringfireball.net/projects/markdown/syntax)** và một số **tính năng bổ trợ khác**.
+
+## Phần mở đầu
+
+Các tài liệu Markdown có chứa siêu dữ liệu ở đầu được gọi là [Phần mở đầu](https://jekyllrb.com/docs/front-matter/):
+
+```text title="my-doc.md"
+// highlight-start
+---
+id: my-doc-id
+title: My document title
+description: My document description
+slug: /my-custom-url
+---
+// highlight-end
+
+## Markdown heading
+
+Markdown text with [links](./hello.md)
+```
+
+## Liên kết
+
+Hỗ trợ các liên kết Markdown thông thường, sử dụng đường dẫn url hoặc đường dẫn tệp tương đối.
+
+```md
+Let's see how to [Create a page](/create-a-page).
+```
+
+```md
+Let's see how to [Create a page](./create-a-page.md).
+```
+
+**Kết quả:** Hãy cùng xem cách để [Tạo trang](./create-a-page.md).
+
+## Hình ảnh
+
+Hỗ trợ các hình ảnh Markdown thông thường.
+
+Bạn có thể tạo đường dẫn tuyệt đối tới hình ảnh tham chiếu trong thư mục tĩnh (`static/img/docusaurus.png`):
+
+```md
+![Docusaurus logo](/img/docusaurus.png)
+```
+
+![Logo Docusaurus](/img/docusaurus.png)
+
+Bạn cũng có thể tham chiếu hình ảnh liên quan đến tệp hiện tại như được minh họa trong phần [hướng dẫn bổ sung](../tutorial-extras/manage-docs-versions.md).
+
+## Khối mã
+
+Hỗ trợ các khối mã Markdown với tính năng tô sáng cú pháp.
+
+    ```jsx title="src/components/HelloDocusaurus.js"
+    function HelloDocusaurus() {
+        return (
+            <h1>Hello, Docusaurus!</h1>
+        )
+    }
+    ```
+
+```jsx title="src/components/HelloDocusaurus.js"
+function HelloDocusaurus() {
+  return <h1>Hello, Docusaurus!</h1>;
+}
+```
+
+## Cảnh cáo
+
+Docusaurus có một cú pháp đặc biệt để tạo cảnh cáo và cảnh báo:
+
+    :::tip My tip
+    
+    Use this awesome feature option
+    
+
+:::
+    
+    :::danger Take care
+    
+    This action is dangerous
+    
+
+:::
+
+:::tip Mẹo hữu ích
+
+Hãy dùng tùy chọn tính năng tuyệt vời này
+
+:::
+
+:::danger Coi chừng
+
+Hành động này rất nguy hiểm
+
+:::
+
+## MDX và các thành phần React
+
+[MDX](https://mdxjs.com/) có thể giúp tăng **tính tương tác** cho tài liệu của bạn đồng thời cho phép sử dụng bất kỳ **thành phần React nào trong Markdown**:
+
+```jsx
+export const Highlight = ({children, color}) => (
+  <span
+    style={{
+      backgroundColor: color,
+      borderRadius: '20px',
+      color: '#fff',
+      padding: '10px',
+      cursor: 'pointer',
+    }}
+    onClick={() => {
+      alert(`You clicked the color ${color} with label ${children}`)
+    }}>
+    {children}
+  </span>
+);
+
+This is <Highlight color="#25c2a0">Docusaurus green</Highlight> !
+
+This is <Highlight color="#1877F2">Facebook blue</Highlight> !
+```
+
+export const Highlight = ({children, color}) => ( <span style={{ backgroundColor: color, borderRadius: '20px', color: '#fff', padding: '10px', cursor: 'pointer', }} onClick={() > { alert(`You clicked the color ${color} with label ${children}`); }}>
+    {children}
+  </span> );
+
+Đây là <Highlight color="#25c2a0">Màu xanh lá của Docusaurus</Highlight> !
+
+Đây là <Highlight color="#1877F2">Màu xanh dương của Facebook</Highlight> !
