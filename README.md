@@ -1,5 +1,6 @@
 - - -
-cover: .gitbook/assets/test_header5.png 
+cover: .gitbook/assets/test_header5.png
+
 coverY: 0
 - - -
 
