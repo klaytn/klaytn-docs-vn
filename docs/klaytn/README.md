@@ -48,7 +48,7 @@ Trong phần này, chúng tôi sẽ mô tả mô hình cấu trúc chuỗi chín
 Trước khi tìm hiểu về mô hình cấu trúc chuỗi chính của Klaytn, chúng ta cần làm quen với các loại nút khác nhau của Klaytn.
 
 #### Core Cell (CC): Nút đồng thuận (CN) + Nút Proxy (PN) <a id="core-cell-cc-consensus-node-cn-proxy-node-pn"></a>
-Một Core Cell (CC) được tạo thành bởi một <strong>Nút đồng thuận (CN)<strong> duy nhất và hai <strong>Nút proxy (PN)<strong>. Nút đồng thuận tham gia vào quá trình tạo khối, trong khi Nút proxy cung cấp giao diện cho mạng. Nút proxy chuyển yêu cầu giao dịch đến Nút đồng thuận và truyền các khối xuống Nút điểm cuối.
+Một Core Cell (CC) được tạo thành bởi một <strong>Nút đồng thuận (CN)</strong> duy nhất và hai <strong>Nút proxy (PN)</strong>. Nút đồng thuận tham gia vào quá trình tạo khối, trong khi Nút proxy cung cấp giao diện cho mạng. Nút proxy chuyển yêu cầu giao dịch đến Nút đồng thuận và truyền các khối xuống Nút điểm cuối.
 
 > Nếu bạn muốn trở thành Người vận hành Core Cell, hãy đọc phần [hướng dẫn cài đặt và vận hành Core Cell](./../installation-guide/deployment/core-cell/installation-guide/before-you-install.md).
 
