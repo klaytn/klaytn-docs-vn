@@ -317,7 +317,7 @@
     * [Trình duyệt khối](dapp/developer-tools/block-explorers/getting-started.md)
         * [Klaytnscope](toolkit/klaytnscope.md)
         * [Klaytnfinder](https://www.klaytnfinder.io/)
-* [Glossary](misc/glossary.md)
+* [Chú giải thuật ngữ](misc/glossary.md)
 ## --- <a href="#misc" id="misc"></a>
 
 * [Lịch sử nâng cấp căn bản của Klaytn](misc/klaytn-history.md)
