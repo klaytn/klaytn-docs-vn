@@ -28,6 +28,7 @@ Hãy nhớ rằng những điểm cuối này được cung cấp cho cộng đ�
 |                                             | `https://archive-en.cypress.klaytn.net`           | klay,eth,net   | Lưu trữ |
 | [All That Node](www.allthatnode.com)        | `https://klaytn-mainnet-rpc.allthatnode.com:8551` | klay,eth,net   | Đầy đủ  |
 | [Mạng lưới BlockPI](https://blockpi.io/)    | `https://klaytn.blockpi.network/v1/rpc/public`    | klay,eth,net   | Đầy đủ  |
+| [Pokt Network](https://pokt.network/)       | `https://klaytn-rpc.gateway.pokt.network/)`       | klay,eth,net   | Đầy đủ  |
 
 **WebSocket**
 
@@ -45,21 +46,15 @@ Hãy nhớ rằng những điểm cuối này được cung cấp cho cộng đ�
 | ------------------------------------------- | ----------------------------------------------------- | -------------- | ------- |
 | [Quỹ Klaytn](https://www.klaytn.foundation) | `https://public-en-baobab.klaytn.net`                 | klay,eth,net   | Đầy đủ  |
 |                                             | `https://archive-en.baobab.klaytn.net/`               | klay,eth,net   | Lưu trữ |
-| Fantrie                                     | `https://baobab01.fautor.app/`                        | klay,eth,net   | Đầy đủ  |
-|                                             | `https://baobab02.fautor.app/`                        | klay,eth,net   | Đầy đủ  |
-|                                             | `https://baobab.fautor.app/archive`                   | klay,eth,net   | Lưu trữ |
-| [All That Node](www.allthatnode.com)        | `https://klaytn-baobab-rpc.allthatnode.com:8551`      | klay,eth,net   | Đầy đủ  |
+| [All That Node](www.allthatnode.com)        | `https://klaytn-baobab-rpc.allthatnode.com:8551`      | klay,eth,net   | Full    |
 | [Mạng lưới BlockPI](https://blockpi.io/)    | `https://klaytn-baobab.blockpi.network/v1/rpc/public` | klay,eth,net   | Đầy đủ  |
 
 **WebSocket**
 
 | Nhà cung cấp dịch vụ                        | Điểm cuối                               | Không gian tên | Loại   |
 | ------------------------------------------- | --------------------------------------- | -------------- | ------- |
-| [Quỹ Klaytn](https://www.klaytn.foundation) | `wss://public-en-baobab.klaytn.net/ws`  | klay,eth,net   | Đầy đủ  |
+| [Quỹ Klaytn](https://www.klaytn.foundation) | `wss://public-en-baobab.klaytn.net/ws`  | klay,eth,net   | Full    |
 |                                             | `wss://archive-en.baobab.klaytn.net/ws` | klay,eth,net   | Lưu trữ |
-| Fantrie                                     | `wss://baobab01.fautor.app/ws/`         | klay,eth,net   | Đầy đủ  |
-|                                             | `wss://baobab02.fautor.app/ws/`         | klay,eth,net   | Đầy đủ  |
-|                                             | `wss://baobab.fautor.app/archive/ws`    | klay,eth,net   | Lưu trữ |
 
 ### Tài nguyên hữu ích
 

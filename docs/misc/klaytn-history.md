@@ -2,6 +2,17 @@
 
 Trang này trình bày tất cả các lần hard fork cho chuỗi khối Klaytn.
 
+## Shanghai EVM
+
+| ``      | Baobab                        | Cypress                       |
+| ------- | ----------------------------- | ----------------------------- |
+| Ngày    | Aug 28, 2023 10:30:31 / UTC+9 | Oct 16, 2023 10:50:24 / UTC+9 |
+| Số khối | `#131,608,000`                | `#135,456,000`                |
+
+### Tóm tắt
+
+Ethereum's Shanghai hard fork items were introduced with the [v1.11.1 release](https://github.com/klaytn/klaytn/releases/tag/v1.11.1) and [v1.11.0 release](https://github.com/klaytn/klaytn/releases/tag/v1.11.0), which includes changes from [EIP-3651](https://eips.ethereum.org/EIPS/eip-3651), [EIP-3855](https://eips.ethereum.org/EIPS/eip-3855), and [EIP-3860](https://eips.ethereum.org/EIPS/eip-3860)
+
 ## KIP-103
 
 | ``      | Baobab                      | Cypress                     |
@@ -25,10 +36,10 @@ Lần hard fork KIP-103 được giới thiệu cùng với [phiên bản v1.10.
 
 
 ## Kore
-| ``      | Baobab                      | Cypress                     |
-| ------- | --------------------------- | --------------------------- |
-| Ngày    | 10/01/2023 10:20:50 / UTC+9 | 17/04/2023 01:24:48 / UTC+9 |
-| Số khối | `#111,736,800`              | `#119,750,400`              |
+| ``      | Baobab                        | Cypress                       |
+| ------- | ----------------------------- | ----------------------------- |
+| Ngày    | Jan 10, 2023 10:20:50 / UTC+9 | Apr 17, 2023 01:24:48 / UTC+9 |
+| Số khối | `#111,736,800`                | `#119,750,400`                |
 
 ### Tóm tắt
 
@@ -37,10 +48,10 @@ Lần hard fork Kore được giới thiệu cùng với [phiên bản v1.10.0](
 
 
 ## Magma
-| ``      | Baobab                      | Cypress                     |
-| ------- | --------------------------- | --------------------------- |
-| Ngày    | 08/08/2022 11:01:20 / UTC+9 | 29/08/2022 11:51:00 / UTC+9 |
-| Số khối | `#98,347,376`               | `#99,841,497`               |
+| ``      | Baobab                        | Cypress                       |
+| ------- | ----------------------------- | ----------------------------- |
+| Ngày    | Aug 08, 2022 11:01:20 / UTC+9 | Aug 29, 2022 11:51:00 / UTC+9 |
+| Số khối | `#98,347,376`                 | `#99,841,497`                 |
 
 ### Tóm tắt
 
@@ -48,10 +59,10 @@ Lần hard fork Magma được giới thiệu cùng với [phiên bản v1.9.0](
 
 ## EthTxType
 
-| ``      | Baobab                      | Cypress                     |
-| ------- | --------------------------- | --------------------------- |
-| Ngày    | 27/03/2022 23:56:31 / UTC+9 | 31/03/2022 12:14:39 / UTC+9 |
-| Số khối | `#86,513,895`               | `#86,816,005`               |
+| ``      | Baobab                        | Cypress                     |
+| ------- | ----------------------------- | --------------------------- |
+| Ngày    | Mar 27, 2022 23:56:31 / UTC+9 | 31/03/2022 12:14:39 / UTC+9 |
+| Số khối | `#86,513,895`                 | `#86,816,005`               |
 
 ### Tóm tắt
 
@@ -59,10 +70,10 @@ Lần thay đổi EthTxType của Ethereum được giới thiệu cùng với [
 
 ## London EVM
 
-| ``      | Baobab                      | Cypress                     |
-| ------- | --------------------------- | --------------------------- |
-| Ngày    | 14/01/2022 11:02:55 / UTC+9 | 31/03/2022 12:14:39 / UTC+9 |
-| Số khối | `#80,295,291`               | `#86,816,005`               |
+| ``      | Baobab                        | Cypress                       |
+| ------- | ----------------------------- | ----------------------------- |
+| Ngày    | Jan 14, 2022 11:02:55 / UTC+9 | Mar 31, 2022 12:14:39 / UTC+9 |
+| Số khối | `#80,295,291`                 | `#86,816,005`                 |
 
 ### Tóm tắt
 
@@ -70,10 +81,10 @@ Các hạng mục hard fork của Ethereum London đã được giới thiệu c
 
 ## Istanbul EVM
 
-| ``      | Baobab                      | Cypress                    |
-| ------- | --------------------------- | -------------------------- |
-| Ngày    | 17/11/2021 23:42:13 / UTC+9 | 31/03/2022 12:14:39 / UTC+ |
-| Số khối | `#75,373,312`               | `#86,816,005`              |
+| ``           | Baobab                        | Cypress                       |
+| ------------ | ----------------------------- | ----------------------------- |
+| Date         | Nov 17, 2021 23:42:13 / UTC+9 | Mar 31, 2022 12:14:39 / UTC+9 |
+| Block number | `#75,373,312`                 | `#86,816,005`                 |
 
 ### Tóm tắt
 

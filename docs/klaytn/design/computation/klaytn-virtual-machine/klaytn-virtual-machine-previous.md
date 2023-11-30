@@ -138,29 +138,57 @@ LƯU Ý: Tài liệu này chứa biểu phí được sử dụng trước khi k
 
 Chúng tôi xác định những tập hợp con gồm những chỉ thị sau:
 
-* `W_zero` = {`STOP`, `RETURN`, `REVERT`}
-* `W_base` = {`ADDRESS`, `ORIGIN`, `CALLER`, `CALLVALUE`, `CALLDATASIZE`, `CODESIZE`, `GASPRICE`, `COINBASE`, `TIMESTAMP`, `NUMBER`, `DIFFICULTY`, `GASLIMIT`, `RETURNDATASIZE`, `POP`, `PC`, `MSIZE`, `GAS`}
-* `W_verylow` = {`ADD`, `SUB`, `LT`, `GT`, `SLT`, `SGT`, `EQ`, `ISZERO`, `AND`, `OR`, `XOR`, `NOT`, `BYTE`, `CALLDATALOAD`, `MLOAD`, `MSTORE`, `MSTORE8`, `PUSH`, `DUP`, `SWAP`}
-* `W_low` = {`MUL`, `DIV`, `SDIV`, `MOD`, `SMOD`, `SIGNEXTEND`}
-* `W_mid` = {`ADDMOD`, `MULMOD`, `JUMP`}
-* `W_high` = {`JUMPI`}
-* `W_extcode` = {`EXTCODESIZE`}
+For example, gas cost can be calculated simply like below, but some gas cost calculation functions are very complex. So I would not explain the exact gas cost calculation function here.
 
 #### Chi phí gas <a id="gas-cost"></a>
 
 Hàm chi phí gas chung, `C`, được xác định như sau:
 
-`C(S_system, S_machine, I) := C_mem(S_machine,i') - C_mem(S_machine, i) +`
+| Address | Precompiled contracts | Item                                         | Value        |
+|:------- |:--------------------- |:-------------------------------------------- |:------------ |
+| 0x01    | ecrecover             | EcrecoverGas                                 | 3000         |
+| 0x02    | sha256hash            | Sha256BaseGas, Sha256PerWordGas              | 60, 12       |
+| 0x03    | ripemd160hash         | Ripemd160BaseGas, Ripemd160PerWordGas        | 600, 120     |
+| 0x04    | dataCopy              | IdentityBaseGas, IdentityPerWordGas          | 15, 3        |
+| 0x05    | bigModExp             | ModExpQuadCoeffDiv                           | 20 | ​       |
+| 0x06    | bn256Add              | Bn256AddGas                                  | 150          |
+| 0x07    | bn256ScalarMul        | Bn256ScalarMulGas                            | 6000         |
+| 0x08    | bn256Pairing          | Bn256PairingBaseGas, Bn256PairingPerPointGas | 45000, 34000 |
+| 0x09    | vmLog                 | VMLogBaseGas, VMLogPerByteGas                | 100, 20      |
+| 0x10    | feePayer              | FeePayerGas                                  | 300          |
+| 0x11    | validateSender        | ValidateSenderGas                            | 5000         |
 
-* `C_SSTORE(S_system, S_machine)`, if `w == SSTORE`
-* `G_exp`, if `(w == EXP) && (S_machine[1] == 0)`
-* `G_exp + G_expbyte x (1 + floor(log_256(S_machine,sp[1])))`,
+#### Gas calculation during contract execution <a id="gas-calculation-during-contract-execution"></a>
+The gas cost of one transaction is calculated through the methods described below. First, gas is added according to the transaction type and input. Then, if the contract is executed, opcodes are executed one by one until the execution ends or `STOP` operation appears. In the process, the cost is charged according to the `constantGas` defined for each opcode and the additionally defined gas calculation method.
 
-  if `(w == EXP) && (S_machine,sp[1] > 0)`
+Below is a brief explanation of the gas calculation logic during contract execution using the fee schedule variables defined above. As it assumes a general situation, unusual situations such as revert appears is not considered.
 
-* `G_verylow + G_copy x ceil(S_machine,sp[2] / 32)`,
+* add `constantGas` defined in each opcode to gas
+  * e.g. if an opcode is `MUL`, add `G_low` to gas
+  * e.g. if an opcode is `CREATE2`, add `G_create` to gas
+* add the gas which is calculated through additionally defined gas calculation method
+  * For `LOG'N'`, where N is [0,1,2,3,4], add `G_log + memoryGasCost * g_logdata + N x G_logtopic` to gas
+  * For `EXP`, add `G_exp + byteSize(stack.back(1)) x G_expbyte` to gas
+  * For `CALLDATACOPY` or `CODECOPY` or `RETURNDATACOPY`, add `wordSize(stack.back(2)) x G_copy` to gas
+  * For `EXTCODECOPY`, add `wordSize(stack.back(3)) x G_copy` to gas
+  * For `SHA3`, add `G_sha3 + wordSize(stack.back(1)) x G_sha3word` to gas
+  * For `RETURN`, `REVERT`, `MLoad`, `MStore8`, `MStore`, add `memoryGasCost` to gas
+  * For `CREATE`, add `memoryGasCost + size(contract.code) x G_codedeposit`
+  * For `CREATE2`, add `memoryGasCost + size(data) x G_sha3word + size(contract.code) x G_codedeposit` to gas
+  * For `SSTORE`,
+    * From a zero-value address to a non-zero value (NEW VALUE), add `G_sset` to gas
+    * From a non-zero value address to a zero-value address (DELETE), add `G_sreset` to gas and add `R_sclear` to refund
+    * From a non-zero to a non-zero (CHANGE), add `G_sreset` to gas
+  * For `CALL`, `CALLCODE`, `DELEGATECALL`, `STATICCALL`,
+    * if it is `CALL` and `CALLCODE` and if it transfers value, add `G_callvalue` to gas
+    * if it is `CALL` and if it transfers value and if it is a new account, add `G_newaccount` to gas
+    * if the callee contract is precompiled contracts, calculate precompiled contract gas cost and add it to gas
+    * add `memoryGasCost + availableGas - availableGas/64, where availableGas = contract.Gas - gas` to gas
+  * For `SELFDESTRUCT`,
+    * if it transfers value and if is a new account, add `G_newaccount` to gas
+    * if the contract has not suicided yet, add `R_selfdestruct` to refund
 
-  if `w == CALLDATACOPY || CODECOPY || RETURNDATACOPY`
+### Môi trường thực thi <a id="execution-environment"></a>
 
 * `G_extcode + G_copy x ceil(S_machine,sp[3] / 32)`,
 

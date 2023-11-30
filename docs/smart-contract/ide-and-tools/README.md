@@ -9,6 +9,10 @@ description: >-
 
 * Remix Online IDE là một bộ công cụ đắc lực để phát triển, triển khai, gỡ lỗi và kiểm thử các hợp đồng thông minh tương thích với EVM. Bạn có thể viết, biên dịch, triển khai và thực thi các hợp đồng thông minh trên Klaytn từ Remix IDE bằng cách sử dụng Plugin Klaytn.
 
+#### [Klaytn Contracts Wizard](https://wizard.klaytn.foundation/) <a href="#klaytn-contract-wizard" id="klaytn-contract-wizard"></a>
+
+* Klaytn Contracts Wizard is an interactive generator to bootstrap your smart contract and learn about Klaytn Contracts. This is based on OpenZeppelin Wizard.
+
 #### [Truffle](../../toolkit/truffle.md) <a href="#truffle" id="truffle"></a>
 
 * Truffle là công cụ cho phép biên dịch và triển khai các hợp đồng thông minh Klaytn viết bằng ngồn ngữ Solidity. Hiện tại, Klaytn hỗ trợ Truffle lên đến phiên bản Truffle v5.0.26.

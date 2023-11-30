@@ -75,7 +75,7 @@ Số khối nâng cấp giao thức `IstanbulEVM` như sau.
 | COINBASE       |             189 |
 | TIMESTAMP      |             265 |
 | NUMBER         |             202 |
-| DIFFICULTY     |             180 |
+| PREVRANDAO     |            1498 |
 | GASLIMIT       |             166 |
 | CHAINID        |             120 |
 | SELFBALANCE    |             374 |
@@ -91,6 +91,7 @@ Số khối nâng cấp giao thức `IstanbulEVM` như sau.
 | MSIZE          |             137 |
 | GAS            |             230 |
 | JUMPDEST       |              10 |
+| PUSH0          |              80 |
 | PUSH1          |             120 |
 | PUSH2          |             120 |
 | PUSH3          |             120 |

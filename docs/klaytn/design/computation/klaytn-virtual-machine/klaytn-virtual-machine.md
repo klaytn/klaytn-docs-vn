@@ -1,5 +1,13 @@
 # Máy ảo Klaytn <a id="klaytn-virtual-machine"></a>
 
+{% hint style="success" %}
+NOTE: KLVM has changed with the `Kore` hardfork. If you want the previous document, please refer to [previous document](klaytn-virtual-machine-previous.md).
+
+`Kore` hardfork block numbers are as follows.
+* Baobab Testnet: `#111736800`
+* Cypress Mainnet: `#119750400`
+{% endhint %}
+
 ## Tổng quan <a id="overview"></a>
 
 Phiên bản hiện tại của Máy ảo Klaytn \(KLVM\) có nguồn gốc từ Máy ảo Ethereum \(EVM\). Nội dung của chương này chủ yếu dựa theo [Ethereum Yellow Paper](https://github.com/ethereum/yellowpaper). KLVM liên tục được cải thiện bởi đội ngũ Klaytn, vì thế, tài liệu này có thể được cập nhật thường xuyên. Vui lòng không coi tài liệu này là phiên bản cuối cùng về thông số kỹ thuật của KLVM. Như đã được mô tả trong tuyên bố lập trường, đội ngũ Klaytn cũng có dự định áp dụng các máy ảo khác hoặc môi trường thực thi khác nhằm củng cố khả năng và hiệu suất của nền tảng Klaytn. Chương này đề cập đến thông số kỹ thuật của KLVM và sự khác biệt giữa KLVM và EVM.
@@ -142,27 +150,58 @@ Số khối nâng cấp giao thức `IstanbulEVM` như sau.
 
 Chúng tôi xác định những tập hợp con gồm những chỉ thị sau:
 
-* `W_zero` = {`STOP`, `RETURN`, `REVERT`}
-* `W_base` = {`ADDRESS`, `ORIGIN`, `CALLER`, `CALLVALUE`, `CALLDATASIZE`, `CODESIZE`, `GASPRICE`, `COINBASE`, `TIMESTAMP`, `NUMBER`, `DIFFICULTY`, `GASLIMIT`, `RETURNDATASIZE`, `POP`, `PC`, `MSIZE`, `GAS`, `CHAINID`, `BASEFEE`}
-* `W_verylow` = {`ADD`, `SUB`, `LT`, `GT`, `SLT`, `SGT`, `EQ`, `ISZERO`, `AND`, `OR`, `XOR`, `NOT`, `BYTE`, `CALLDATALOAD`, `MLOAD`, `MSTORE`, `MSTORE8`, `PUSH`, `DUP`, `SWAP`}
-* `W_low` = {`MUL`, `DIV`, `SDIV`, `MOD`, `SMOD`, `SIGNEXTEND`, `SELFBALANCE`}
-* `W_mid` = {`ADDMOD`, `MULMOD`, `JUMP`}
-* `W_high` = {`JUMPI`}
-* `W_extcode` = {`EXTCODESIZE`}
+```text
+# ecrecover, sha256hash, ripemd160hash, dataCopy
+Gas = XXXBaseGas + (number of words * XXXPerWordGas)
 
 #### Chi phí gas <a id="gas-cost"></a>
 
 Hàm chi phí gas chung, `C`, được xác định như sau:
 
-`C(S_system, S_machine, I) := C_mem(S_machine,i') - C_mem(S_machine, i) +`
+#### Gas calculation during contract execution <a id="gas-calculation-during-contract-execution"></a>
+The gas cost of one transaction is calculated through the methods described below. First, gas is added according to the transaction type and input. Then, if the contract is executed, opcodes are executed one by one until the execution ends or `STOP` operation appears. In the process, the cost is charged according to the `constantGas` defined for each opcode and the additionally defined gas calculation method.
 
-* `C_SSTORE(S_system, S_machine)`, if `w == SSTORE`
-* `G_exp`, if `(w == EXP) && (S_machine[1] == 0)`
-* `G_exp + G_expbyte x (1 + floor(log_256(S_machine,sp[1])))`,
+Here, I will briefly explain the gas calculation logic during contract execution using the fee schedule variables defined above. As this explanation assumes a general situation, the unusual situations such as revert appears is not considered.
 
-  if `(w == EXP) && (S_machine,sp[1] > 0)`
+* add `constantGas` defined in each opcode to gas
+  * e.g. if an opcode is `MUL`, add `G_low` to gas
+  * e.g. if an opcode is `CREATE2`, add `G_create` to gas
+* add the gas which is calculated through additionally defined gas calculation method
+  * For `LOG'N'`, where N is [0,1,2,3,4], add `G_log + memoryGasCost * g_logdata + N x G_logtopic` to gas
+  * For `EXP`, add `G_exp + byteSize(stack.back(1)) x G_expbyte` to gas
+  * For `CALLDATACOPY` or `CODECOPY` or `RETURNDATACOPY`, add `wordSize(stack.back(2)) x G_copy` to gas
+  * For `EXTCODECOPY`,
+    * add `wordSize(stack.back(3)) x G_copy` to gas
+    * [**_eip2929_**] If an address is not in AccessList, add it to accessList and add `G_coldSloadCost - G_warmStorageReadCost` to gas
+  * For `EXTCODESIZE` or `EXTCODEHASH` or `BALANCE`,
+    * [**_eip2929_**] If an address is not in AccessList, add it to accessList and add `G_coldSloadCost - G_warmStorageReadCost` to gas
+  * For `SHA3`, add `G_sha3 + wordSize(stack.back(1)) x G_sha3word` to gas
+  * For `RETURN`, `REVERT`, `MLoad`, `MStore8`, `MStore`, add `memoryGasCost` to gas
+  * For `CREATE`, add `memoryGasCost + size(contract.code) x G_codedeposit` to gas
+  * For `CREATE2`, add `memoryGasCost + size(data) x G_sha3word + size(contract.code) x G_codedeposit` to gas
+  * For `SSTORE`,
+    * [**_eip2929_**]  If a slot(contractAddr, slot) is not in AccessList, add it to accessList and add `G_coldSloadCost` to gas
+    * If it just reads the slot (no-op), add `G_warmStorageReadCost` to gas
+    * If it creates a new slot, add `G_sset` to gas
+    * If it deletes the slot, add `G_sreset-G_coldSloadCost` to gas and add `R_sclear` to refund
+    * If it recreates the slot once exists before, add `G_warmStorageReadCost` to gas and subtract `R_sclear` from refund
+    * If it deletes the slot once exists before, add `R_sclear` to refund
+    * If it resets to the original inexistent slot, add `G_warmStorageReadCost` to gas and add `G_sset - G_warmStorageReadCost` to refund
+    * IF it resets to the original existing slot, add `G_warmStorageReadCost` to gas and add `G_sreset - G_coldSloadCost - G_warmStorageReadCost` to refund
+  * For `SLOAD`,
+    * [**_eip2929_**] If a slot(contractAddr, slot) is not in AccessList, add it to accessList and add `G_coldSloadCost` to gas
+    * [**_eip2929_**] If a slot(contractAddr, slot) is in AccessList, add `G_warmStorageReadCost` to gas
+  * For `CALL`, `CALLCODE`, `DELEGATECALL`, `STATICCALL`,
+    * [**_eip2929_**] If an address is not in AccessList, add it to accessList and add `G_coldSloadCost` to gas
+    * if it is `CALL` and `CALLCODE` and if it transfers value, add `G_callvalue` to gas
+    * if it is `CALL` and if it transfers value and if it is a new account, add `G_newaccount` to gas
+    * if the callee contract is precompiled contracts, calculate precompiled contract gas cost and add it to gas
+    * add `memoryGasCost + availableGas - availableGas/64, where availableGas = contract.Gas - gas` to gas
+  * For `SELFDESTRUCT`,
+    * [**_eip2929_**] If an address is not in AccessList, add it to accessList and add `G_coldSloadCost` to gas
+    * if it transfers value and if is a new account, add `G_newaccount` to gas
 
-* `G_verylow + G_copy x ceil(S_machine,sp[2] / 32)`,
+### Môi trường thực thi <a id="execution-environment"></a>
 
   if `w == CALLDATACOPY || CODECOPY || RETURNDATACOPY`
 
