@@ -22,7 +22,7 @@ Khi các nền tảng chuỗi khối thông thường cung cấp một loại gi
 
 Trong các nền tảng chuỗi khối thông thường, địa chỉ được lấy khóa công khai, sau đó khóa này được lấy lại từ chữ ký giao dịch. Điều này chỉ có thể xảy ra nếu địa chỉ và cặp khóa được gắn chặt chẽ với nhau.
 
-Vì trong Klaytn, một cặp khóa được tách khỏi địa chỉ, địa chỉ của người gửi không thể lấy được bằng cách sử dụng chữ ký giao dịch. Đây là lí do khiến các loại giao dịch của Klaytn, trừ TxTypeLegacyTransaction có trường `from`. Trong Klaytn, để xác thực một giao dịch, [AccountKey](../accounts.md#accountKey) của `from` sẽ được lấy, và khóa lấy được sẽ dùng để xác thực chữ ký của giao dịch.
+Vì trong Klaytn, một cặp khóa được tách khỏi địa chỉ, địa chỉ của người gửi không thể lấy được bằng cách sử dụng chữ ký giao dịch. Đây là lí do khiến các loại giao dịch của Klaytn, trừ TxTypeLegacyTransaction có trường `from`. Trong Klaytn, để xác thực một giao dịch, [AccountKey](../tài khoảns.md#tài khoản-key) của `from` sẽ được lấy, và khóa lấy được sẽ dùng để xác thực chữ ký của giao dịch.
 
 ### Ủy thác phí <a id="fee-delegation"></a>
 
